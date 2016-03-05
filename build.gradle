@@ -1,0 +1,96 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.3.3.RELEASE"
+        classpath "io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE"
+    }
+}
+
+plugins {
+    id "org.sonarqube" version "1.2"
+}
+
+apply from: "$rootDir/gradle/versioning.gradle"
+apply from: "$rootDir/libraries.gradle"
+
+sonarqube {
+    properties {
+        property "sonar.host.url", "https://sonar-nprogramming.rhcloud.com"
+        property "sonar.projectKey", "trading-office"
+        property "sonar.projectName", "Trading Office"
+    }
+}
+
+apply plugin: "io.spring.dependency-management"
+
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.cloud:spring-cloud-starter-parent:Brixton.M5'
+    }
+}
+
+repositories {
+    mavenLocal()
+    maven {
+        url "http://repo1.maven.org/maven2"
+        artifactUrls "https://repository.jboss.org/nexus/content/groups/public"
+    }
+    jcenter()
+    maven { url "http://maven-repository.openspaces.org" }
+    maven { url "http://repository.springsource.com/maven/bundles/external" }
+    maven {
+        url 'http://repo.spring.io/milestone'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+apply from: "$rootDir/gradle/jacoco.gradle"
+
+
+sourceCompatibility = 1.8
+
+test {
+    testLogging {
+        exceptionFormat = 'full'
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+    }
+}
+
+
+apply plugin: 'spring-boot'
+
+dependencies {
+    compile libs.spring.boot_web,
+            libs.spring.boot_actuator,
+            libs.spring.boot_amqp,
+            libs.spring.eureka_client,
+            libs.spring.cloud_config,
+            libs.spring.feign,
+            libs.jasperreports,
+            libs.itext,
+            libs.jackson,
+            libs.jackson_databind,
+            libs.jackson_annotations,
+            libs.swift,
+            libs.jaxb,
+            libs.guava
+
+    testCompile libs.test.assertj,
+            libs.test.mockito,
+            libs.test.junit
+}
+
+jar {
+    baseName = 'trading-office-confirmation-sender'
+    version = '1.0.0'
+}
+
+defaultTasks 'clean', 'bootRepackage'
+
+task stage {
+    dependsOn 'bootRepackage'
+}

@@ -1,0 +1,1 @@
+web: java -jar -Dserver.port=$PORT -javaagent:newrelic/newrelic.jar build/libs/trading-office-confirmation-sender-1.0.0.jar
