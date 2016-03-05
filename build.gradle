@@ -14,6 +14,11 @@ plugins {
 
 apply from: "$rootDir/gradle/versioning.gradle"
 apply from: "$rootDir/libraries.gradle"
+apply plugin: "io.spring.dependency-management"
+apply plugin: 'java'
+apply plugin: 'idea'
+apply from: "$rootDir/gradle/jacoco.gradle"
+apply plugin: 'spring-boot'
 
 sonarqube {
     properties {
@@ -23,13 +28,13 @@ sonarqube {
     }
 }
 
-apply plugin: "io.spring.dependency-management"
-
 dependencyManagement {
     imports {
         mavenBom 'org.springframework.cloud:spring-cloud-starter-parent:Brixton.M5'
     }
 }
+
+sourceCompatibility = 1.8
 
 repositories {
     mavenLocal()
@@ -45,23 +50,12 @@ repositories {
     }
 }
 
-apply plugin: 'java'
-apply plugin: 'idea'
-
-apply from: "$rootDir/gradle/jacoco.gradle"
-
-
-sourceCompatibility = 1.8
-
 test {
     testLogging {
         exceptionFormat = 'full'
         events "passed", "skipped", "failed", "standardOut", "standardError"
     }
 }
-
-
-apply plugin: 'spring-boot'
 
 dependencies {
     compile libs.spring.boot_web,
