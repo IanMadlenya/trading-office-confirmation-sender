@@ -23,8 +23,8 @@ apply plugin: 'spring-boot'
 sonarqube {
     properties {
         property "sonar.host.url", "https://sonar-nprogramming.rhcloud.com"
-        property "sonar.projectKey", "trading-office"
-        property "sonar.projectName", "Trading Office"
+        property "sonar.projectKey", "trading-office-confirmation-sender"
+        property "sonar.projectName", "Trading Office - Confirmation Sender"
     }
 }
 
