@@ -1,8 +1,5 @@
 server:
   port: 9002
-endpoints:
-  jmx:
-    unique-names: true
 
 feign:
   hystrix:
